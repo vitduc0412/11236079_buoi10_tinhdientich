@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính Diện Tích & Chu Vi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .container {
+            width: 300px;
+            margin: auto;
+        }
+        input, select, button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Tính Diện Tích & Chu Vi</h2>
+        <label for="shape">Chọn hình:</label>
+        <select id="shape" onchange="updateInputs()">
+            <option value="rectangle">Hình Chữ Nhật</option>
+            <option value="circle">Hình Tròn</option>
+            <option value="triangle">Hình Tam Giác</option>
+        </select>
+
+        <div id="inputs"></div>
+
+        <button onclick="calculate()">Tính</button>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function updateInputs() {
+            const shape = document.getElementById("shape").value;
+            const inputsDiv = document.getElementById("inputs");
+            inputsDiv.innerHTML = "";
+
+            if (shape === "rectangle") {
+                inputsDiv.innerHTML = `
+                    <input type="number" id="length" placeholder="Nhập chiều dài" min="0">
+                    <input type="number" id="width" placeholder="Nhập chiều rộng" min="0">
+                `;
+            } else if (shape === "circle") {
+                inputsDiv.innerHTML = `
+                    <input type="number" id="radius" placeholder="Nhập bán kính" min="0">
+                `;
+            } else if (shape === "triangle") {
+                inputsDiv.innerHTML = `
+                    <input type="number" id="sideA" placeholder="Nhập cạnh a" min="0">
+                    <input type="number" id="sideB" placeholder="Nhập cạnh b" min="0">
+                    <input type="number" id="sideC" placeholder="Nhập cạnh c" min="0">
+                `;
+            }
+        }
+
+        function calculate() {
+            const shape = document.getElementById("shape").value;
+            let result = "";
+
+            if (shape === "rectangle") {
+                const length = parseFloat(document.getElementById("length").value);
+                const width = parseFloat(document.getElementById("width").value);
+                if (isNaN(length) || isNaN(width) || length <= 0 || width <= 0) {
+                    alert("Vui lòng nhập số hợp lệ!");
+                    return;
+                }
+                const area = length * width;
+                const perimeter = 2 * (length + width);
+                result = `Diện tích: ${area}, Chu vi: ${perimeter}`;
+            }
+
+            else if (shape === "circle") {
+                const radius = parseFloat(document.getElementById("radius").value);
+                if (isNaN(radius) || radius <= 0) {
+                    alert("Vui lòng nhập số hợp lệ!");
+                    return;
+                }
+                const area = Math.PI * radius * radius;
+                const perimeter = 2 * Math.PI * radius;
+                result = `Diện tích: ${area.toFixed(2)}, Chu vi: ${perimeter.toFixed(2)}`;
+            }
+
+            else if (shape === "triangle") {
+                const a = parseFloat(document.getElementById("sideA").value);
+                const b = parseFloat(document.getElementById("sideB").value);
+                const c = parseFloat(document.getElementById("sideC").value);
+                if (isNaN(a) || isNaN(b) || isNaN(c) || a <= 0 || b <= 0 || c <= 0 || (a + b <= c) || (a + c <= b) || (b + c <= a)) {
+                    alert("Ba cạnh không tạo thành tam giác!");
+                    return;
+                }
+                const s = (a + b + c) / 2;
+                const area = Math.sqrt(s * (s - a) * (s - b) * (s - c));
+                const perimeter = a + b + c;
+                result = `Diện tích: ${area.toFixed(2)}, Chu vi: ${perimeter}`;
+            }
+
+            document.getElementById("result").innerText = result;
+        }
+
+        updateInputs();
+    </script>
+</body>
+</html>
